@@ -13,9 +13,11 @@ let game = new Phaser.Game(
 
 
 function preload() {
+    game.load.image('star', 'assets/star.png');
 }
 
 function create() {
+    game.add.sprite(0, 0, 'star');
 }
 
 function update() {
