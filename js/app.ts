@@ -21,12 +21,25 @@ function preload() {
     game.load.image('sky', 'assets/sky.png');
     game.load.image('ground', 'assets/platform.png');
 
+    game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+
     game.load.image('star', 'assets/star.png');
 }
 
 
 
 function create() {
+    gen_world();
+    gen_player();
+
+
+}
+
+function update() {
+}
+
+
+function gen_world() {
     //NOTE: enable phisics
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -49,10 +62,20 @@ function create() {
     //NOTE: genarate ledge2
     let ledge2 = platforms.create(-150, 250, 'ground');
     ledge2.body.immovable = true;
-
-
 }
 
-function update() {
-}
 
+function gen_player () {
+    let player = game.add.sprite(32, game.world.height - 150, 'dude');
+
+    game.physics.arcade.enable(player);
+
+    //  Player physics properties. Give the little guy a slight bounce.
+    player.body.bounce.y = 0.2;
+    player.body.gravity.y = 300;
+    player.body.collideWorldBounds = true;
+
+    //  Our two animations, walking left and right.
+    player.animations.add('left', [0, 1, 2, 3], 10, true);
+    player.animations.add('right', [5, 6, 7, 8], 10, true);
+}
