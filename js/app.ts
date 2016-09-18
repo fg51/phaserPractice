@@ -6,7 +6,7 @@ const kHEIGHT: number = 600;
 
 
 let platforms;
-
+let player;
 
 let game = new Phaser.Game(
     kWIDTH, kHEIGHT, Phaser.AUTO, '',
@@ -36,6 +36,7 @@ function create() {
 }
 
 function update() {
+    game.physics.arcade.collide(player, platforms);
 }
 
 
@@ -66,7 +67,7 @@ function gen_world() {
 
 
 function gen_player () {
-    let player = game.add.sprite(32, game.world.height - 150, 'dude');
+    player = game.add.sprite(32, game.world.height - 150, 'dude');
 
     game.physics.arcade.enable(player);
 
