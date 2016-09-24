@@ -1,14 +1,14 @@
 /// <reference path="../typings/index.d.ts" />
 
 
-const kWIDTH: number  = 800;
+const kWIDTH:  number = 800;
 const kHEIGHT: number = 600;
 
 
 let platforms;
 let player;
+let stars;
 let cursors;
-
 
 let game = new Phaser.Game(
     kWIDTH, kHEIGHT, Phaser.AUTO, '',
@@ -22,7 +22,6 @@ let game = new Phaser.Game(
 function preload() {
     game.load.image('sky', 'assets/sky.png');
     game.load.image('ground', 'assets/platform.png');
-
     game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
 
     game.load.image('star', 'assets/star.png');
@@ -31,16 +30,26 @@ function preload() {
 
 
 function create() {
+    //NOTE: enable phisics
+    game.physics.startSystem(Phaser.Physics.ARCADE);
+
     gen_world();
     gen_player();
+    gen_stars();
 
     //gen_controls
     cursors = game.input.keyboard.createCursorKeys();
 
 }
 
+
 function update() {
+    //  Collide the player and the stars with the platforms
     game.physics.arcade.collide(player, platforms);
+    game.physics.arcade.collide(stars,  platforms);
+
+    //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
+    game.physics.arcade.overlap(player, stars, collectStar, null, this);
 
     // player movement
     player.body.velocity.x = 0;
@@ -60,13 +69,10 @@ function update() {
     if (cursors.up.isDown && player.body.touching.down) {
         player.body.velocity.y = -350;
     }
-
 }
 
 
 function gen_world() {
-    //NOTE: enable phisics
-    game.physics.startSystem(Phaser.Physics.ARCADE);
 
     //NOTE: background
     game.add.sprite(0, 0, 'sky');
@@ -104,3 +110,24 @@ function gen_player () {
     player.animations.add('left', [0, 1, 2, 3], 10, true);
     player.animations.add('right', [5, 6, 7, 8], 10, true);
 }
+
+
+function gen_stars() {
+    //  Finally some stars to collect
+    stars = game.add.group();
+    stars.enableBody = true;
+
+    for (let i = 0; i < 12; ++i) {
+        let star = stars.create(i * 70, 0, 'star');
+        //game.physics.arcade.enable(star);
+        star.body.gravity.y = 300;
+        star.body.bounce.y = 0.7 + Math.random() * 0.2;
+    }
+}
+
+
+function collectStar(player, star) {
+    star.kill();
+}
+
+
