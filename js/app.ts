@@ -7,6 +7,8 @@ const kHEIGHT: number = 600;
 
 let platforms;
 let player;
+let cursors;
+
 
 let game = new Phaser.Game(
     kWIDTH, kHEIGHT, Phaser.AUTO, '',
@@ -32,11 +34,33 @@ function create() {
     gen_world();
     gen_player();
 
+    //gen_controls
+    cursors = game.input.keyboard.createCursorKeys();
 
 }
 
 function update() {
     game.physics.arcade.collide(player, platforms);
+
+    // player movement
+    player.body.velocity.x = 0;
+
+    if (cursors.left.isDown) { // left
+        player.body.velocity.x = -150;
+        player.animations.play('left');
+    } else if (cursors.right.isDown) { // right
+        player.body.velocity.x = 150;
+        player.animations.play('right');
+    } else { // stand still
+        player.animations.stop();
+        player.frame = 4;
+    }
+
+    // jump
+    if (cursors.up.isDown && player.body.touching.down) {
+        player.body.velocity.y = -350;
+    }
+
 }
 
 
