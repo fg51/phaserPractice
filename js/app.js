@@ -24,7 +24,7 @@ function create() {
     //gen_controls
     cursors = game.input.keyboard.createCursorKeys();
 
-    game.input.onTap.add(onTap,this);
+    //game.input.onTap.add(onTap,this);
 }
 function update() {
     //  Collide the player and the stars with the platforms
@@ -48,6 +48,18 @@ function update() {
     }
     // jump
     if (cursors.up.isDown && player.body.touching.down) {
+        player.body.velocity.y = -350;
+    }
+
+    if (game.input.pointer1.isDown){
+        if (game.input.pointer1.worldX > player.body.center.x) {
+            player.body.velocity.x = 150;
+        }
+        else {
+            player.body.velocity.x = -150;
+        }
+    }
+    if (game.input.pointer1.justPressed(200) && player.body.touching.down) {
         player.body.velocity.y = -350;
     }
 }
