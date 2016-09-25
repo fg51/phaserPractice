@@ -45,8 +45,10 @@ function update() {
         player.frame = 4;
     }
     // jump
-    if (cursors.up.isDown && player.body.touching.down) {
-        player.body.velocity.y = -350;
+    if (cursors.up.isDown || game.input.pointer1.justPressed(200)) {
+        if (player.body.touching.down) {
+            player.body.velocity.y = -350;
+        }
     }
 }
 function gen_world() {
