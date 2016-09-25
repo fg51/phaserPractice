@@ -23,6 +23,8 @@ function create() {
     gen_stars();
     //gen_controls
     cursors = game.input.keyboard.createCursorKeys();
+
+    game.input.onTap.add(onTap,this);
 }
 function update() {
     //  Collide the player and the stars with the platforms
@@ -45,10 +47,8 @@ function update() {
         player.frame = 4;
     }
     // jump
-    if (cursors.up.isDown || game.input.pointer1.justPressed(200)) {
-        if (player.body.touching.down) {
-            player.body.velocity.y = -350;
-        }
+    if (cursors.up.isDown && player.body.touching.down) {
+        player.body.velocity.y = -350;
     }
 }
 function gen_world() {
@@ -92,4 +92,9 @@ function gen_stars() {
 }
 function collectStar(player, star) {
     star.kill();
+}
+function onTap(pointer,doubleTap){
+    if (player.body.touching.down) {
+        player.body.velocity.y = -350;
+    }
 }
